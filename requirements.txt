@@ -1,0 +1,3 @@
+streamlit
+fastapi[all]
+networkx
