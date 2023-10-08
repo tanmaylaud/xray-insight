@@ -74,15 +74,14 @@ if prompt:
         prompt = past + "<sep>" + prompt
 
     with st.spinner("generating..."):
-
-        result = requests.get(f"http://localhost:{PORT}/predict", {
-                                                                "query": prompt,
-                                                                "mode": mode,
-                                                                "metadata": metadata,
-                                                                }).json()
+        files = {"file": (uploaded_file.name, uploaded_file, "image/jpeg")}
+        result = requests.post(f"http://localhost:{PORT}/predict/",
+                                                                files=files,
+                                                                #headers = {"Content-Type": "multipart/form-data"}
+                                                                ).json()
     if result:
         with st.chat_message(name="ai", avatar="logo.png"):
-            output = result["response"]["output"]
+            output = result["response"]
             if "links" in result["response"]:
                 for name, link in result["response"]["links"].items():
                     if link:

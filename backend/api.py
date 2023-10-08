@@ -1,10 +1,16 @@
-from fastapi import FastAPI
-
+from fastapi import FastAPI, UploadFile
+from utils import predict as util_predict
+import shutil
 app = FastAPI()
 
-@app.get("/predict")
-def predict(query: str, image, mode, metadata):
+@app.post("/predict/")
+def predict(file:UploadFile):
+    print(file.file)
+    with open(file.filename, "wb") as f:
+        shutil.copyfileobj(file.file, f)
+    response = util_predict(file=file.filename)
     return {
-        "response": "test",
+        "response": response,
         "graph": None
     }
+
