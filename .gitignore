@@ -1,2 +1,4 @@
+.DS_Store
+crawler/**result*.json
 __pycache__/
 *.jpeg
