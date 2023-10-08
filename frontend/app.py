@@ -4,12 +4,19 @@ import requests
 import json
 from collections import defaultdict
 from utils import img_to_html, create_graph, plotly_plot, plotly_timeline, strip_debug
+import re
 
 try: 
     PORT = int(sys.argv[1])
 except:
     PORT = 8000
 
+
+def replace_url(match):
+    url = match.group(1)
+    # You can customize the replacement text based on the extracted URL here
+    return f" [Retrieved image]({url}) "
+    
 @st.cache_data
 def convert_to_json(chat_history):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
@@ -60,7 +67,6 @@ for i in st.session_state["chat_history"][user_key]:
                 st.write(i["debug_message"])
 
 if prompt:
-    prompt = "User: " + prompt
     history = st.session_state["chat_history"][user_key]
     if len(history) > 2:
         past = []
@@ -70,18 +76,22 @@ if prompt:
                     past.append("User: " + chat["content"])
                 else:
                     past.append("System: " + chat["content"])
-        past = "<sep>".join(past)
-        prompt = past + "<sep>" + prompt
 
     with st.spinner("generating..."):
         files = {"file": (uploaded_file.name, uploaded_file, "image/jpeg")}
         result = requests.post(f"http://localhost:{PORT}/predict/",
+                                                                data={"query": prompt, 
+                                                                      "mode": mode},
                                                                 files=files,
                                                                 #headers = {"Content-Type": "multipart/form-data"}
                                                                 ).json()
     if result:
+
         with st.chat_message(name="ai", avatar="logo.png"):
             output = result["response"]
+            output = re.sub("(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])",
+                   replace_url,
+                   output)
             if "links" in result["response"]:
                 for name, link in result["response"]["links"].items():
                     if link:
