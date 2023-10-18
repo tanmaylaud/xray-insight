@@ -1,6 +1,7 @@
 # xray-insight
-
+This RAG pipeline was built as part of the AGI LLM Hackathon organized in October. We stood first in the Test category of the hackathon.
 ![Logo](frontend/logo.png)
+
 
 ### Monitoring 
 
