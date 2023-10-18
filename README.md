@@ -1,5 +1,6 @@
 # xray-insight
 
+![Logo](frontend/logo.png)
 
 ### Monitoring 
 
