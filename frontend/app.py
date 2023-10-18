@@ -1,3 +1,5 @@
+""" Based on frontend component of https://github.com/McAuley-Lab/RecWizard
+"""
 import sys
 import streamlit as st
 import requests
