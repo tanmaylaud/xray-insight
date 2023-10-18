@@ -1,3 +1,5 @@
+""" Taken from the monitoring pipeline in https://github.com/McAuley-Lab/RecWizard . Please cite RecWizard if you use this pipeline.
+"""
 import json
 import time
 import logging
